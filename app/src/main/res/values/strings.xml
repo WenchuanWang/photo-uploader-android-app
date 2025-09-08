@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">photo-uploader-app</string>
+    
+    <!-- Error Messages -->
+    <string name="error_upload_failed">Some items failed to upload. Please check their status.</string>
+
+    <string name="idle_state">Select Photos from Gallery to start with</string>
+
+    <!-- UI Labels -->
+    <string name="title_gallery_screen">Your Gallery</string>
+    <string name="button_select_photo">Select Photos from Gallery</string>
+    
+    <!-- Buttons -->
+    <string name="button_retry">Retry</string>
+</resources>

@@ -1,0 +1,13 @@
+# Gradle/AGP build outputs (module)
+/build/
+/intermediates/
+/outputs/
+/generated/
+
+# Native build cache (module)
+/.cxx/
+
+# Gradle per-module cache (rare)
+/.gradle/
+
+

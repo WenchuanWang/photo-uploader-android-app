@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "279427154899",
+    "project_id": "photo-uploader-a22f0",
+    "storage_bucket": "photo-uploader-a22f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279427154899:android:78f01fc7a28bc9522e6526",
+        "android_client_info": {
+          "package_name": "com.example.photo_uploader_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0NUla2N_ZUYGZ0FuLadu1EJD_wEwbkaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
