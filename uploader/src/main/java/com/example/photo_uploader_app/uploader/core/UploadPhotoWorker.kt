@@ -5,13 +5,14 @@ import android.net.Uri
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.photo_uploader_app.core.DispatcherProvider
+import com.example.photo_uploader_app.domain_api.IoDispatcher
 import com.example.photo_uploader_app.domain_api.UploadResultListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storageMetadata
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -23,10 +24,10 @@ internal class UploadPhotoWorker @AssistedInject constructor(
     private val storage: FirebaseStorage,
     private val auth: FirebaseAuth,
     private val resultListener: UploadResultListener,
-    private val dispatchers: DispatcherProvider
+    @IoDispatcher private val io: CoroutineDispatcher
 ) : CoroutineWorker(appContext, params) {
 
-    override suspend fun doWork(): Result = withContext(dispatchers.io) {
+    override suspend fun doWork(): Result = withContext(io) {
         val dedup = inputData.getString("dedupKey") ?: return@withContext Result.failure()
         val localPath = inputData.getString("localPath") ?: return@withContext Result.failure()
         val mime = inputData.getString("mimeType") ?: "image/jpeg"

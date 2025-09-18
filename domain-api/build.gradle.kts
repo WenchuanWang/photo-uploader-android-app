@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.hilt)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -22,4 +24,8 @@ android {
     }
 }
 
-dependencies {}
+dependencies {
+    // DI
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}
