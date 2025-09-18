@@ -10,9 +10,12 @@ import com.example.photo_uploader_app.data.local.PhotoDao
 import com.example.photo_uploader_app.data.local.PhotoEntity
 import com.example.photo_uploader_app.data.mapper.toPhoto
 import com.example.photo_uploader_app.domain.model.Photo
+import com.example.photo_uploader_app.domain_api.IoDispatcher
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -20,17 +23,19 @@ import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
     private val photoDao: PhotoDao,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @IoDispatcher private val io: CoroutineDispatcher
 ): PhotoRepository {
 
     override fun getAllPhotos(): Flow<List<Photo>> =
         photoDao.getAllPhotos().map { it.map(PhotoEntity::toPhoto) }
 
-    override fun getPendingUploadPhotos(): Flow<List<Photo>> =
+    override suspend fun getPendingUploadPhotos(): Flow<List<Photo>> = withContext(io) {
         photoDao.getPendingUploadPhotos().map { it.map(PhotoEntity::toPhoto) }
+    }
 
-    override suspend fun insertPhotos(uris: List<Uri>) {
-        if (uris.isEmpty()) return
+    override suspend fun insertPhotos(uris: List<Uri>) = withContext(io) {
+        if (uris.isEmpty()) return@withContext
         val cr = context.contentResolver
         val entities = uris.mapNotNull { uri ->
             try {
