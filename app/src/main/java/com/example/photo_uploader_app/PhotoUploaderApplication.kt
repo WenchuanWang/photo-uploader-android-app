@@ -39,8 +39,8 @@ class PhotoUploaderApplication : Application(), Configuration.Provider {
         WorkManager.initialize(this, workManagerConfiguration)
         appScope.launch {
             ensureSignedIn()
+            uploadPhotosUseCase(appScope)
         }
-        uploadPhotosUseCase(appScope)
     }
 
     private suspend fun ensureSignedIn(): String {

@@ -23,20 +23,19 @@ internal class UploadPhotoWorker @AssistedInject constructor(
     @Assisted params: WorkerParameters,
     private val storage: FirebaseStorage,
     private val auth: FirebaseAuth,
-    private val resultListener: UploadResultListener,
-    @IoDispatcher private val io: CoroutineDispatcher
+    private val resultListener: UploadResultListener
 ) : CoroutineWorker(appContext, params) {
 
-    override suspend fun doWork(): Result = withContext(io) {
-        val dedup = inputData.getString("dedupKey") ?: return@withContext Result.failure()
-        val localPath = inputData.getString("localPath") ?: return@withContext Result.failure()
+    override suspend fun doWork(): Result {
+        val dedup = inputData.getString("dedupKey") ?: return Result.failure()
+        val localPath = inputData.getString("localPath") ?: return Result.failure()
         val mime = inputData.getString("mimeType") ?: "image/jpeg"
         val ext = inputData.getString("fileExt") ?: "jpg"
 
         val file = File(localPath)
         if (!file.exists()) {
             resultListener.onFailed(dedup)
-            return@withContext Result.failure()
+            return Result.failure()
         }
 
         try {
@@ -45,7 +44,7 @@ internal class UploadPhotoWorker @AssistedInject constructor(
             val uid = auth.currentUser?.uid
                 ?: runCatching { auth.signInAnonymously().await().user?.uid }
                     .getOrNull()
-                ?: return@withContext Result.retry()
+                ?: return Result.retry()
             val remotePath = "users/$uid/${dedup}.$ext"
 
             val ref = storage.reference.child(remotePath)
@@ -59,10 +58,10 @@ internal class UploadPhotoWorker @AssistedInject constructor(
             val url = ref.downloadUrl.await().toString()
 
             resultListener.onSuccess(dedup, url)
-            Result.success()
+            return Result.success()
         } catch (t: Throwable) {
             resultListener.onFailed(dedup)
-            Result.retry()
+            return Result.retry()
         }
     }
 }
