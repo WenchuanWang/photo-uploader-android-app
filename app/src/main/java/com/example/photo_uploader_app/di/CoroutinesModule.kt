@@ -1,6 +1,6 @@
 package com.example.photo_uploader_app.di
 
-import com.example.photo_uploader_app.core.DispatcherProvider
+import com.example.photo_uploader_app.domain_api.IoDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,10 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
 import javax.inject.Singleton
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class IoDispatcher
 
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
@@ -42,12 +38,4 @@ object CoroutinesModule {
     fun providesCoroutineScope(
         @DefaultDispatcher dispatcher: CoroutineDispatcher
     ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
-
-    @Provides
-    @Singleton
-    fun provideDispatcherProvider(
-        @IoDispatcher io: CoroutineDispatcher
-    ): DispatcherProvider = object : DispatcherProvider {
-        override val io = io
-    }
 }

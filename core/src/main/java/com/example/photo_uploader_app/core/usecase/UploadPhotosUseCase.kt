@@ -13,7 +13,7 @@ class UploadPhotosUseCase @Inject constructor(
     private val repository: PhotoRepository,
     private val scheduler: UploadScheduler
 ) {
-    operator fun invoke(scope: CoroutineScope) {
+    suspend operator fun invoke(scope: CoroutineScope) {
         repository.getPendingUploadPhotos()
             .distinctUntilChanged()
             .onEach { photos ->

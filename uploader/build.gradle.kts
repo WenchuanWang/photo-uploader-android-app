@@ -25,7 +25,6 @@ android {
 }
 
 dependencies {
-    api(project(":core"))
     api(project(":domain-api"))
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.android)
